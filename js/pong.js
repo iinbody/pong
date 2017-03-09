@@ -1,4 +1,3 @@
-//Feburary 17th 2017, original
 $(document).ready(function(){
 
 	var canvas = $("#canvas")[0];
@@ -19,7 +18,8 @@ $(document).ready(function(){
 	var startDirection = Math.floor(Math.random()*2)*pi;
 	var dirMod = 0;
 	var leftScore = 0; var rightScore = 0;
-	
+	var startButton = document.getElementById("startButton");
+	startButton.addEventListener("click", function(){startGame()});
 
 	var startScreen = function(){
 		ctx.strokeStyle = "black";
@@ -188,6 +188,6 @@ $(document).ready(function(){
 	}
 
 	//startScreen();
-	startGame();
+	//startGame();
 
 })
