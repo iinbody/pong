@@ -15,7 +15,7 @@ $(document).ready(function(){
 	var ballRadius = 10;
 	var ballSpeed = 5;
 	var balls = [];
-	var startDirection = Math.floor(Math.random()*2)*pi;
+	var startDirection = Math.floor(Math.random()*2)*pi + (Math.random()*2-1)*pi/4;
 	var dirMod = 0;
 	var leftScore = 0; var rightScore = 0;
 	var startButton = document.getElementById("startButton");
@@ -30,7 +30,6 @@ $(document).ready(function(){
 	var startGame = function(){
 		restartGame();
 		game_loop = setInterval(paintGame, tickRate);
-		paintGame();
 	}
 
 	var restartGame = function(){
@@ -38,7 +37,7 @@ $(document).ready(function(){
 			paddles[i].y = h/2-ph/2;
 		}
 		balls = [];
-		balls.push(new newBall(w/2, h/2, ballSpeed, startDirection)) //need direction based on last score
+		balls.push(new newBall(w/2, h/2, ballSpeed, startDirection));
 	}
 
 	var paintGame = function(){
@@ -131,10 +130,10 @@ $(document).ready(function(){
 		}
 		this.outOfBounds = function(){
 			if(this.x > w){//left scores
-				startDirection = 0;
+				startDirection = 0 + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}else if(this.x < 0){//right scores
-				startDirection = pi;
+				startDirection = pi + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}
 		}
