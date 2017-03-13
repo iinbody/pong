@@ -5,6 +5,7 @@ $(document).ready(function(){
 	var w = $("#canvas").width();
 	var h = $("#canvas").height();
 	var pi = Math.PI;
+	var scores = [0,0];
 	var tickRate = 60;
 	var ph = 40;
 	var pw = 5;
@@ -28,6 +29,7 @@ $(document).ready(function(){
 	}
 
 	var startGame = function(){
+		startButton.style.display = 'none';
 		restartGame();
 		game_loop = setInterval(paintGame, tickRate);
 	}
@@ -46,6 +48,7 @@ $(document).ready(function(){
 		paintBall(0); //currently hardcoded for 1 ball
 		paintPaddle();
 		moveBalls();
+		paintScores();
 
 		if(map[87]){ //paddle one up
 			if(paddles[0].y >= 0){
@@ -66,7 +69,7 @@ $(document).ready(function(){
 			}		}
 	}
 
-	var drawRectangle = function(x,y,width,height,corner){
+	/*var drawRectangle = function(x,y,width,height,corner){
 		ctx.fillStyle = "grey";
 		ctx.beginPath();
 		ctx.moveTo(x+corner, y);
@@ -78,10 +81,13 @@ $(document).ready(function(){
 		ctx.fillStyle = "white";
 		ctx.font="30px sans-serif";
 		ctx.fillText("Start",x+corner,y+height/2);
-	}
+	}*/
 
 	var paintScores = function(){
-		
+		ctx.fillStyle = "white";
+		ctx.font="30px sans-serif";
+		ctx.fillText("Player 1: "+scores[0],10,30);
+		ctx.fillText("Player 2: "+scores[1],w-150,30);
 	}
 
 	 function newBall(x,y,speed,direction){
@@ -130,9 +136,11 @@ $(document).ready(function(){
 		}
 		this.outOfBounds = function(){
 			if(this.x > w){//left scores
+				scores[0]++;
 				startDirection = 0 + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}else if(this.x < 0){//right scores
+				scores[1]++;
 				startDirection = pi + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}
