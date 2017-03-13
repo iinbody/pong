@@ -1,3 +1,4 @@
+//Feburary 17th 2017, original
 $(document).ready(function(){
 
 	var canvas = $("#canvas")[0];
