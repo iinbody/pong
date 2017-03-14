@@ -4,10 +4,11 @@ $(document).ready(function(){
 	var canvas = $("#canvas")[0];
 	var ctx = canvas.getContext("2d");
 	var w = $("#canvas").width();
-	var h = $("#canvas").height();
+	var scoreArea = 40;
+	var h = $("#canvas").height() - scoreArea;
 	var pi = Math.PI;
-	var scores = [0,0];
-	var tickRate = 60;
+	var score = [0,0];
+	var tickRate = 30;
 	var ph = 40;
 	var pw = 5;
 	var paddles = [];
@@ -30,6 +31,7 @@ $(document).ready(function(){
 	}
 
 	var startGame = function(){
+		score = [0,0];
 		startButton.style.display = 'none';
 		restartGame();
 		game_loop = setInterval(paintGame, tickRate);
@@ -41,6 +43,13 @@ $(document).ready(function(){
 		}
 		balls = [];
 		balls.push(new newBall(w/2, h/2, ballSpeed, startDirection));
+	}
+
+	var gameOver = function(player){
+		clearInterval(game_loop);
+		ctx.fillText("Player "+player+" WINS!", w/2-100, h/2-50);
+		startButton.innerHTML = 'Restart!';
+		startButton.style.display = 'inline';
 	}
 
 	var paintGame = function(){
@@ -87,8 +96,8 @@ $(document).ready(function(){
 	var paintScores = function(){
 		ctx.fillStyle = "white";
 		ctx.font="30px sans-serif";
-		ctx.fillText("Player 1: "+scores[0],10,30);
-		ctx.fillText("Player 2: "+scores[1],w-150,30);
+		ctx.fillText("Player 1: "+score[0], 10, h+scoreArea-10);
+		ctx.fillText("Player 2: "+score[1], w-150, h+scoreArea-10);
 	}
 
 	 function newBall(x,y,speed,direction){
@@ -137,11 +146,19 @@ $(document).ready(function(){
 		}
 		this.outOfBounds = function(){
 			if(this.x > w){//left scores
-				scores[0]++;
+				score[0]++;
+				if(score[0] === 7){
+					gameOver(1);
+					return;
+				}
 				startDirection = 0 + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}else if(this.x < 0){//right scores
-				scores[1]++;
+				score[1]++;
+				if(score[1] === 7){
+					gameOver(2);
+					return;
+				}
 				startDirection = pi + (Math.random()*2-1)*pi/4;
 				restartGame();
 			}
@@ -158,6 +175,16 @@ $(document).ready(function(){
 		ctx.fillStyle = "grey";
 		ctx.fillRect(0, 0, w, h);
         ctx.strokeRect(0, 0, w, h);
+        ctx.strokeStyle = "white";
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, h, w, h+scoreArea);
+        ctx.strokeRect(0, h, w, h+scoreArea);
+        ctx.beginPath();
+        ctx.moveTo(w/2, 0);
+        ctx.lineTo(w/2, h);
+        ctx.moveTo(w/2, h/2+30);
+        ctx.arc(w/2, h/2, 30, pi/2, 5*pi/2);
+        ctx.stroke();
 	}
 
 	var paintPaddle = function(x,y){
